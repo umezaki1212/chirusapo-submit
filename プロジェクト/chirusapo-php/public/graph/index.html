@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Graph</title>
+    <script src="js/charts_loader.js"></script>
+    <script>
+        google.charts.load('current', {
+            'packages': ['corechart']
+        });
+        google.charts.setOnLoadCallback(drawVisualization);
+
+        function drawVisualization() {
+            let paramData = GetQueryString();
+            let paramDataDay = paramData['day'];
+            let paramDataBodyHeight = paramData['data1'];
+            let paramDataBodyWeight = paramData['data2'];
+
+            let dataDay = paramDataDay.split(',');
+            let dataBodyHeight = paramDataBodyHeight.split(',');
+            let dataBodyWeight = paramDataBodyWeight.split(',');
+
+            if (!(dataDay.length === dataBodyHeight.length) || !(dataDay.length === dataBodyWeight.length) || !(dataBodyHeight.length === dataBodyWeight.length)) {
+                return
+            }
+
+            let gridData = [];
+            gridData.push(['日付', paramData['label1'], paramData['label2']]);
+            dataDay.forEach(function (_, index) {
+                gridData.push([dataDay[index], parseFloat(dataBodyHeight[index]), parseFloat(dataBodyWeight[index])])
+            });
+
+            let data = google.visualization.arrayToDataTable(gridData);
+
+            let options = {
+                seriesType: 'bars',
+                series: {
+                    0: {
+                        targetAxisIndex: 0
+                    },
+                    1: {
+                        targetAxisIndex: 1,
+                        type: 'line'
+                    }
+                },
+                vAxis: {
+                    gridlines: {
+                        color: 'transparent'
+                    }
+                }
+            };
+
+            let chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+            console.log(chart.getImageURI());
+        }
+
+        function GetQueryString() {
+            let result = {};
+            if(1 < window.location.search.length) {
+                let query = window.location.search.substring(1);
+                let parameters = query.split('&');
+                for(let i = 0; i < parameters.length; i++) {
+                    let element = parameters[i].split('=');
+                    let paramName = decodeURIComponent(element[0]);
+                    result[ paramName ] = decodeURIComponent(element[1]);
+                }
+            }
+            return result;
+        }
+    </script>
+</head>
+
+<body style="margin: 0;">
+    <div id="chart_div" style="width: 100%; height: 100vh;"></div>
+</body>
+
+</html>

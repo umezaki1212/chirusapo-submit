@@ -1,0 +1,12 @@
+{
+  "require": {
+    "slim/slim": "^3.12",
+    "swiftmailer/swiftmailer": "^6.0",
+    "google/cloud-storage": "^1.14",
+    "php-ffmpeg/php-ffmpeg": "^0.14.0",
+    "guzzlehttp/guzzle": "~6.0",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "google/apiclient": "^2.4"
+  }
+}
